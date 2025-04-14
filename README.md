@@ -132,50 +132,52 @@ IntersectionObserver 通过data-appear观察属性判断元素是否被曝光
 document.addEventListener（'click'）+ data-report 判断是否需要记录
 
 ## 页面停留时长
+```js
 prePageUrl = encodeURIComponent(location.href);
 window.addEventListener('beforeunload');
 window.addEventListener('popstate', e => handler(e), true);
 window.addEventListener('replaceState', e => handler(e), true);
 window.addEventListener('pushState', e => handler(e), true);
 lastTime = Date.now();
-
+```
 ## PV
+```js
 prePageUrl = encodeURIComponent(location.href);
 window.addEventListener('popstate', e => handler(e), true);
 window.addEventListener('replaceState', e => handler(e), true);
 window.addEventListener('pushState', e => handler(e), true);
-
+```
 ## api 监控
 重写 xhr 或者 fetch
 
 ## 资源加载性能
+```js
 if (window.PerformanceObserver) {
-			const observer = new window.PerformanceObserver(performance => {
-				const entries = performance.getEntries() as PerformanceResourceTiming[];
-				const timings = this.resolveEntries(entries);
-				timings.forEach(timing => {
-					this.callback(timing);
-				});
-			});
-			observer.observe({
-				entryTypes: ['resource'],
-			});
-		} else {
-			window.addEventListener('load', () => {
-				const entries = performance.getEntriesByType(
-					'resource'
-				) as PerformanceResourceTiming[];
-				const timings = this.resolveEntries(entries);
-				timings.forEach(timing => {
-					this.callback(timing);
-				});
-			});
-		}
-
+	const observer = new window.PerformanceObserver(performance => {
+		const entries = performance.getEntries() as PerformanceResourceTiming[];
+		const timings = this.resolveEntries(entries);
+		timings.forEach(timing => {
+			this.callback(timing);
+		});
+	});
+	observer.observe({
+		entryTypes: ['resource'],
+	});
+} else {
+	window.addEventListener('load', () => {
+		const entries = performance.getEntriesByType(
+			'resource'
+		) as PerformanceResourceTiming[];
+		const timings = this.resolveEntries(entries);
+		timings.forEach(timing => {
+			this.callback(timing);
+		});
+	});
+}
+```
 ## 页面渲染性能监控
-const p = performance.getEntriesByType(
-			'navigation'
-		)
+```js
+const p = performance.getEntriesByType('navigation')
 web-vitals 观察 FCP LCP NIP CLS
 通过p计算其他指标
  	redirect: (p.redirectEnd - p.redirectStart).toFixed(2), // 重定向的时间
@@ -188,6 +190,7 @@ web-vitals 观察 FCP LCP NIP CLS
 				ready: (p.domComplete - p.domInteractive).toFixed(2), // DOM解析耗时(不包含dom内嵌资源加载时间)
 				resources: (p.loadEventStart - p.domContentLoadedEventEnd).toFixed(2), //资源加载耗时
 				onLoad: (p.loadEventEnd - p.loadEventStart).toFixed(2), // onLoad事件耗时(所有资源已加载)
+```
 ## TODO
 
   - 用户链路追踪 每次埋点统计都push到breadcrumb数组里面，满20步就发服务端。
