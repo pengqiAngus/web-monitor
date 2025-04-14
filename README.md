@@ -19,7 +19,9 @@
 | promiseErrorLog | false | false | promise异常 |
 | resourcesErrorLog | false | false | 资源加载异常 |
 | exposureLog | false | false | 曝光埋点 |
-| automaticBurialPointLog | false | false | 自动埋点 |
+| automaticBurialPointLog | false | false | 点击事件埋点 |
+| userBehaviorTrack | false | false | 用户链路追踪 |
+| recordReplay | false | false | 用户页面行为录制(rrweb) |
 | pageDwellTimeLog | false | false | 页面停留时间 |
 | pvLog | false | false | pv |
 | xhrLog | false | false | 接口监控 |
