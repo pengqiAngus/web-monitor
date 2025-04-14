@@ -2,9 +2,7 @@
 
 ## 安装
 
-```npm
-npm i @fe-hl/monitor-sdk -S
-```
+
 
 ## 使用
 
@@ -104,6 +102,8 @@ monitorSdk.report({
   - 2、浏览器主线程忙于处理其他任务：当用户进行交互时，如果主线程正忙于处理其他任务（如执行 JavaScript、处理样式计算等），则会导致延迟。
 
 
+
+
 ## 指标参考
 
 | 指标 | 优 | 中 | 差 |说明 |
@@ -113,7 +113,17 @@ monitorSdk.report({
 | FID | 0-100(ms) | 100-300(ms) |300-~(ms) |首次输入延迟 |
 
 
+## 错误监控 
+window.onerror(js 运行错误) 
+window.onunhandledrejection(promise错误) 
+window.addEventListener(资源错误) 
+React用 错误边界（Error Boundaries）代替window.onerror
+
+## 白屏监控
+x,y 各取 9个点使用 elementsFromPoint 是否有dom元素
+
+
 ## TODO
 
-  - 用户链路追踪(待实现)
-  - 用户页面行为录制(待实现)
+  - 用户链路追踪 每次埋点统计都push到breadcrumb数组里面，满20步就发服务端。
+  - 用户页面行为录制 rrweb
