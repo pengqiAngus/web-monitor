@@ -1,5 +1,5 @@
 {
-	"name": "@fe-hl/monitor-sdk",
+	"name": "monitor-sdk",
 	"version": "1.2.3",
 	"private": false,
 	"description": "前端监控SDK",
@@ -16,10 +16,6 @@
 		"server": "cross-env NODE_ENV=development rollup -w -c rollup.config.dev.js",
 		"prepare": "husky install", 
 		"mock": "nodemon examples/app.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://gitee.com/fe-hl/fe-monitor-sdk.git"
 	},
 	"keywords": [
 		"TypeScript",
@@ -67,23 +63,6 @@
 		"rollup-plugin-typescript2": "^0.33.0",
 		"tslib": "^2.4.0",
 		"typescript": "^4.8.2"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"gitHooks": {
-		"pre-commit": "lint-staged"
-	},
-	"config": {
-		"commitizen": {
-			"path": "node_modules/cz-customizable"
-		}
-	},
-	"lint-staged": {
-		"src/**/*.{js,ts,vue}": [
-			"eslint --fix",
-			"git add ."
-		]
 	},
 	"dependencies": {
 		"bowser": "^2.11.0",
