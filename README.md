@@ -122,7 +122,70 @@ React用 错误边界（Error Boundaries）代替window.onerror
 ## 白屏监控
 x,y 各取 9个点使用 elementsFromPoint 是否有dom元素
 
+## 元素曝光监控
+dom元素设置 data-appear
+IntersectionObserver 通过data-appear观察属性判断元素是否被曝光
 
+## 元素点击事件
+document.addEventListener（'click'）+ data-report 判断是否需要记录
+
+## 页面停留时长
+prePageUrl = encodeURIComponent(location.href);
+window.addEventListener('beforeunload');
+window.addEventListener('popstate', e => handler(e), true);
+window.addEventListener('replaceState', e => handler(e), true);
+window.addEventListener('pushState', e => handler(e), true);
+lastTime = Date.now();
+
+## PV
+prePageUrl = encodeURIComponent(location.href);
+window.addEventListener('popstate', e => handler(e), true);
+window.addEventListener('replaceState', e => handler(e), true);
+window.addEventListener('pushState', e => handler(e), true);
+
+## api 监控
+重写 xhr 或者 fetch
+
+## 资源加载性能
+if (window.PerformanceObserver) {
+			const observer = new window.PerformanceObserver(performance => {
+				const entries = performance.getEntries() as PerformanceResourceTiming[];
+				const timings = this.resolveEntries(entries);
+				timings.forEach(timing => {
+					this.callback(timing);
+				});
+			});
+			observer.observe({
+				entryTypes: ['resource'],
+			});
+		} else {
+			window.addEventListener('load', () => {
+				const entries = performance.getEntriesByType(
+					'resource'
+				) as PerformanceResourceTiming[];
+				const timings = this.resolveEntries(entries);
+				timings.forEach(timing => {
+					this.callback(timing);
+				});
+			});
+		}
+
+## 页面渲染性能监控
+const p = performance.getEntriesByType(
+			'navigation'
+		)
+web-vitals 观察 FCP LCP NIP CLS
+通过p计算其他指标
+ 	redirect: (p.redirectEnd - p.redirectStart).toFixed(2), // 重定向的时间
+				appCache: (p.domainLookupStart - p.fetchStart).toFixed(2), // 读取缓存的时间
+				dns: (p.domainLookupEnd - p.domainLookupStart).toFixed(2), // DNS查询耗时
+				tcp: (p.connectEnd - p.connectStart).toFixed(2), // TCP连接耗时
+				ssl: (p.connectEnd - p.secureConnectionStart).toFixed(2), // SSL 安全连接耗时
+				rst: (p.responseStart - p.requestStart).toFixed(2), // 请求响应耗时
+				trans: (p.responseEnd - p.responseStart).toFixed(2), // 响应数据传输耗时
+				ready: (p.domComplete - p.domInteractive).toFixed(2), // DOM解析耗时(不包含dom内嵌资源加载时间)
+				resources: (p.loadEventStart - p.domContentLoadedEventEnd).toFixed(2), //资源加载耗时
+				onLoad: (p.loadEventEnd - p.loadEventStart).toFixed(2), // onLoad事件耗时(所有资源已加载)
 ## TODO
 
   - 用户链路追踪 每次埋点统计都push到breadcrumb数组里面，满20步就发服务端。
