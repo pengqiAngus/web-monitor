@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+		"typeRoots": ["node_modules/@types"],
+    "target": "ES2017", // ts编译的目标文件，我这里编译成es6， 然后交给babel
+    "module": "ESNext", // 使用最新的语法
+		"strict": true, // 开启严格模式
+		"jsx": "preserve",
+		"importHelpers": true,
+		"moduleResolution": "node", // 模块解析策略是node
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true, // 开启es与其他模块的交互
+    "declaration": true, // 开启声明文件的输出
+		"removeComments": true, // 去注释
+    "resolveJsonModule": true,  // 允许导入json模块
+    "skipLibCheck": true,  // 跳过库的检查
+    "noUnusedLocals": true,
+		"experimentalDecorators": true, // 装饰器特性
+    "declarationDir": "./lib",  // 开启声明文件输出目录
+    "baseUrl": ".",
+		"forceConsistentCasingInFileNames": true, // 强制区分大小写
+    "noLib": false, // 不引入默认库文件
+  },
+	"types": [
+		"webpack-env"
+	],
+	"paths": {
+		"@/*": [
+			"src/*"
+		]
+	},
+	"lib": [
+		"esnext",
+		"dom",
+		"dom.iterable",
+		"scripthost"
+	],
+  // 只编译src目录下面的文件
+  "include": [
+		"src/**/*.ts",
+  ],
+	"exclude": [
+    "node_modules"
+  ]
+}
+
