@@ -18,7 +18,6 @@ export default class Perf {
 		let LCP = 0;
 		let FID = 0;
 		let FMP = 0;
-
 		const p = performance.getEntriesByType(
 			'navigation'
 		)[0] as PerformanceNavigationTiming;
@@ -29,16 +28,19 @@ export default class Perf {
 		}).observe({ entryTypes: ['element'] }); //观察页面中的意义的元素
 		// 首次内容绘制
 		onFCP(data => {
+			console.log('onFCP', data);
 			FCP = data.value;
 			callback();
 		});
 		// 最大内容绘制
 		onLCP(data => {
+			console.log('onLCP', data);
 			LCP = data.value;
 			callback();
 		});
 		// 首次输入延迟
 		onFID(data => {
+			console.log('onFID', data);
 			FID = data.value;
 			callback();
 		});
@@ -81,8 +83,82 @@ export default class Perf {
 	}
 
 	init() {
-		window.addEventListener('load', () => {
+		// 检查文档是否已经加载完成
+		if (document.readyState === 'complete') {
+            this.runCheck();
+            this.LCPMonitor();
+		} else {
+			// 如果文档还未加载完成，添加事件监听
+			window.addEventListener('load', () => {
+                this.runCheck();
+                 this.LCPMonitor();
+			});
+		}
+
+		// 同时监听 DOMContentLoaded 事件
+		if (
+			document.readyState === 'interactive' ||
+			document.readyState === 'complete'
+		) {
 			this.runCheck();
+            this.LCPMonitor();
+		} else {
+			document.addEventListener('DOMContentLoaded', () => {
+				this.runCheck();
+                this.LCPMonitor();
+			});
+		}
+	}
+	LCPMonitor() {
+        new PerformanceObserver(list => {
+			const lcpEntry: any = list.getEntries().at(-1) ;
+			if (!lcpEntry.url) return;
+			const navEntry = performance.getEntriesByType('navigation')[0];
+			const resEntries = performance.getEntriesByType('resource');
+			const lcpResEntry = resEntries.filter(e => e.name === lcpEntry.url)[0];
+
+			const docTTFB = navEntry.responseStart;
+
+			const lcpRequestStart = Math.max(
+				docTTFB,
+				lcpResEntry ? lcpResEntry.requestStart : 0
+			);
+
+			const lcpResponseEnd = Math.max(
+				lcpRequestStart,
+				lcpResEntry ? lcpResEntry.responseEnd : 0
+			);
+
+			const lcpRenderTime = Math.max(
+				lcpResponseEnd,
+				lcpEntry ? lcpEntry.startTime : 0
+			);
+
+			console.log('LCP: ', lcpRenderTime, lcpEntry.element);
+			console.log('document_ttfb', docTTFB);
+			console.log('resource_load_delay', lcpRequestStart - docTTFB);
+			console.log('resource_load_time', lcpResponseEnd - lcpRequestStart);
+			console.log('element_render_delay', lcpRenderTime - lcpResponseEnd);
+
+			performance.measure('document_ttfb', {
+				start: 0,
+				end: docTTFB,
+			});
+			performance.measure('resource_load_delay', {
+				start: docTTFB - 0.01,
+				end: lcpRequestStart - 0.01,
+			});
+			performance.measure('resource_load_time', {
+				start: lcpRequestStart,
+				end: lcpResponseEnd,
+			});
+			performance.measure('element_render_delay', {
+				start: lcpResponseEnd - 0.01,
+				end: lcpRenderTime - 0.01,
+			});
+		}).observe({
+			type: 'largest-contentful-paint',
+			buffered: true,
 		});
 	}
 }

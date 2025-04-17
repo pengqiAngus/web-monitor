@@ -62,7 +62,8 @@ class RegisterMonitorSdk {
 				monitorSdkConfig.reportUrl
 			);
 		}
-		if (monitorSdkConfig.perfLog) {
+        if (monitorSdkConfig.perfLog) {
+            
 			new Perf((params: ReportParams) => this.report(params));
 		}
 	}

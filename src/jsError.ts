@@ -14,7 +14,7 @@ export default class JsError {
 		const _originOnerror = window.onerror;
 		window.onerror = (...arg: any) => {
 			const [message, sourceURL, line, column, errorObj] = arg;
-            const e = Utils.formatError(errorObj);
+			const e = Utils.formatError(errorObj);
 			this.callback({
 				type: ReportType.JS_ERROR,
 				message: e.message || message,

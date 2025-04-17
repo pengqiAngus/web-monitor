@@ -15,6 +15,7 @@ export default class ResourcesError {
 		window.addEventListener(
 			'error',
 			(event: any) => {
+				console.log('资源加载异常', event);
 				// 只处理资源错误
 				if (
 					event.target &&
